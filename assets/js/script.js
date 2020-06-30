@@ -208,46 +208,123 @@ function buttonHandler(event) {
 // renderTime();    
 
 
+//------------------------------------var1--------------------------------
+// var totalSeconds = 360;
+// var secondsElapsed = 0;
+// // var showTimer  = document.body.querySelector("#show");
+// var secondsRemaining = 5;
+// var minutesRemaining;
+// var secondsLeft;
+// var interval;
 
-var totalSeconds = 360;
+
+
+// function renderTime() {
+//     // function renderTime() {
+
+//         function startTimer() {
+//             if (secondsRemaining > 0) {
+//                 interval = setInterval(function () {
+//                     secondsElapsed = secondsElapsed+1;
+//                     // console.log(secondsElapsed);
+//                     secondsRemaining = totalSeconds - secondsElapsed;
+//                     minutesRemaining = Math.floor(secondsRemaining/60);
+//                     secondsLeft= secondsRemaining%60;
+//                     console.log(secondsRemaining);
+//                     console.log(secondsElapsed);
+//                     showTimer.textContent = " " + minutesRemaining + " : " + secondsLeft + "     ";
+
+//                 // showTimer.textContent = " " + minutesRemaining + " : " + secondsRemaining + "     ";
+
+//                 // renderTime();
+
+//             }, 1000);
+
+//         }
+//         else {
+//             alert("you are out of time. End of Quiz!")
+//         }
+
+
+//     }
+//     // }
+//     startTimer();
+// };
+// renderTime();
+
+//---------------------------------------------------------------variant1---------------------------------------------
+
+
+
+var totalSeconds = 10;
 var secondsElapsed = 0;
-// var showTimer  = document.body.querySelector("#show");
-var secondsRemaining = 5;
-var minutesRemaining;
+// var showTimer = document.body.querySelector("#show"); 
+var secondsRemaining = totalSeconds;
+var minutesRemaining = Math.floor(secondsRemaining / 60);
 var secondsLeft;
+var currentQuestion = 10;
 var interval;
 
 
 
-function renderTime() {
-    // function renderTime() {
+// function renderTime() {
+function startTimer() {
+    if (secondsRemaining > 0) {
+        interval = setInterval(function () {
 
-        function startTimer() {
-            if (secondsRemaining > 0) {
-                interval = setInterval(function () {
-                    secondsElapsed = secondsElapsed+1;
-                    // console.log(secondsElapsed);
-                    secondsRemaining = totalSeconds - secondsElapsed;
-                    minutesRemaining = Math.floor(secondsRemaining/60);
-                    secondsLeft= secondsRemaining%60;
-                    console.log(secondsRemaining);
-                    console.log(secondsElapsed);
-                    showTimer.textContent = " " + minutesRemaining + " : " + secondsLeft + "     ";
-
-                // showTimer.textContent = " " + minutesRemaining + " : " + secondsRemaining + "     ";
-
-                // renderTime();
-
-            }, 1000);
-
-        }
-        else {
-            alert("you are out of time. End of Quiz!")
-        }
-
+            renderTime();
+        }, 1000);
 
     }
-    // }
-    startTimer();
-};
-renderTime();
+    else {
+
+        alert("you are out of time. End of Quiz!");
+        secondsRemaining = 0;
+        writeScore();
+
+    }
+
+
+}
+// }
+
+function renderTime() {
+    if (secondsRemaining > 0 && currentQuestion === 10) {
+        secondsElapsed = secondsElapsed + 1;
+        // console.log(secondsElapsed);
+        secondsRemaining = totalSeconds - secondsElapsed;
+        minutesRemaining = Math.floor(secondsRemaining / 60);
+        secondsLeft = secondsRemaining % 60;
+        console.log(secondsRemaining);
+        console.log(secondsElapsed);
+        showTimer.textContent = " " + minutesRemaining + " : " + secondsLeft + "     ";
+    }
+    else {
+        writeScore();
+
+    }
+}
+
+
+var correctQuestions = 1;
+var currentQuestion = 10;
+var initials = "";
+var score = correctQuestions * 5;
+var initials = document.body.querySelector("#initials");
+var inputInForm = document.createElement("form");
+var inputIn = document.createElement("input");
+var submitFm = document.createElement("submit");
+function writeScore() {
+    if (secondsRemaining === 0) {
+        initials.appendChild(inputInForm);
+        inputInForm.appendChild(inputIn);
+        inputInForm.appendChild(submitFm);
+    }
+    else {
+
+    }
+
+}
+// writeScore();
+
+startTimer();
