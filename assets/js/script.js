@@ -32,7 +32,7 @@ var questionList = [
 
     {
         "question": "How do I check is a 'for loop' woking",
-        "a": "set a 'cosole.log' to see the uotput in the dev tools ",
+        "a": "set a 'cosole.log' to see the output in the dev tools ",
         "b": "trace the loop very carefully",
         "c": "nest it in a 'while loop' to double proof it",
         "d": "restart the computer",
@@ -100,8 +100,17 @@ var questionList = [
     }
 ];
 
-// var userAnswerInput = " ";
+
+var totalSeconds = 300;
+var secondsElapsed = 0;
+var secondsRemaining = totalSeconds;
+var minutesRemaining = Math.floor(secondsRemaining / 60);
+var secondsLeft= totalSeconds;
 var currentQuestion = 0;
+var interval;
+
+var currentQuestion = 0;
+var correctQuestions=0;
 
 var questionTag = document.body.querySelector("#question")
 var answerTagA = document.body.querySelector("#answer-a");
@@ -114,41 +123,41 @@ var buttonB = document.body.querySelector("#button-b");
 var buttonC = document.body.querySelector("#button-c");
 var buttonD = document.body.querySelector("#button-d");
 
+var questionId;
+
 var showQuestion = document.body.querySelector("#question-status");
 
 var showTimer = document.body.querySelector("#timer-status");
-showQuestion.textContent = " " + (currentQuestion + 1) + "     ";
-// showTimer.textContent = " " + minutesRemaining + " : " + secondsRemaining + "     ";
+var initials = "";
+var scoreDispaly = document.body.querySelector("#your-score");
+var initials = document.body.querySelector("#initials");
+var inputInForm = document.createElement("form");
+var inputIn = document.createElement("input");
+var submitFm = document.createElement("submit");
 
-var totalSeconds = 900;
-// var secondsLeft = totalSeconds - secondsElapsed;
-// var minutesRemaining = Math.floor(secondsLeft / 60);
-// var secondsRemaining = (totalSeconds - secondsElapsed) % 60;
+showQuestion.textContent = " " + (currentQuestion + 1) + "     ";
 
 var secondsElapsed = 0;
+var secondsLeft = totalSeconds;
 var score = document.body.querySelector("#score");
 var interval;
-
-// dataQuestionA.textContent = (questionList[curentQuestion].a);
-// dataQuestionB.textContent = (questionList[curentQuestion].b);
-// dataQuestionC.textContent = (questionList[curentQuestion].c);
-// dataQuestionD.textContent = (questionList[curentQuestion].d);
-// var currentQuestion = 0;
-
 
 function buttonHandler(event) {
     var button = event.target;
     var userAnswer = button.getAttribute("data-answer");
-    console.log(button);
+    // console.log(button);
     showQuestion.textContent = " " + (currentQuestion + 1) + "     ";
-    console.log(userAnswer);
-    console.log(questionId);
+    // console.log(userAnswer);
     var questionId = parseInt(button.getAttribute("data-question"));
+    console.log(questionId);
+    
     questionList[questionId]["userAnswer"] = userAnswer;
-    console.log(currentQuestion);
+    // console.log(currentQuestion);
     if (questionList[questionId]["userAnswer"] === questionList[questionId]["correct"]) {
         score.textContent = "You got it correct";
         currentQuestion++;
+        correctQuestions++;
+        console.log(correctQuestions);
         setTimeout(function () {
             initializeQuestion();
             score.textContent = "";
@@ -158,27 +167,24 @@ function buttonHandler(event) {
         score.textContent = "You got it wrong";
         secondsElapsed = secondsElapsed+10;
         currentQuestion++;
+        secondsElapsed = secondsElapsed+20;
         setTimeout(function () {
             initializeQuestion();
             score.textContent = "";
         }, 2000);
-
+        
     }
-
+    
 };
-    function initializeQuestion() {
-        // startTimer();
-        console.log(questionList[currentQuestion]);
+function initializeQuestion() {
+    if(currentQuestion < 10){// console.log(questionList[currentQuestion]);
         var wholeObj = questionList[currentQuestion];
-        // if (wholeObj === "undefined") {
-        //     return (end);
-        //     console.log(end + "   end questions");
-        // }
+        
         var question = wholeObj.question;
-        console.log(question);
+        // console.log(question);
         questionTag.textContent = question;
         questionTag.setAttribute("data-question", currentQuestion);
-
+        
         answerTagA.textContent = wholeObj.a;
         answerTagB.textContent = wholeObj.b;
         answerTagC.textContent = wholeObj.c;
@@ -188,143 +194,75 @@ function buttonHandler(event) {
         buttonB.setAttribute("data-question", currentQuestion);
         buttonC.setAttribute("data-question", currentQuestion);
         buttonD.setAttribute("data-question", currentQuestion);
-    };
+        
+    }
+    else{
+        writeScore();
+    }
+};
 
-    buttonA.addEventListener("click", buttonHandler);
-    buttonB.addEventListener("click", buttonHandler);
-    buttonC.addEventListener("click", buttonHandler);
-    buttonD.addEventListener("click", buttonHandler);
-    
-    initializeQuestion();
-    
+buttonA.addEventListener("click", buttonHandler);
+buttonB.addEventListener("click", buttonHandler);
+buttonC.addEventListener("click", buttonHandler);
+buttonD.addEventListener("click", buttonHandler);
 
+initializeQuestion();
 
-
-
-
-// initializeQuestion();
-
-// initializeQuestion();
-// renderTime();    
-
-
-//------------------------------------var1--------------------------------
-// var totalSeconds = 360;
-// var secondsElapsed = 0;
-// // var showTimer  = document.body.querySelector("#show");
-// var secondsRemaining = 5;
-// var minutesRemaining;
-// var secondsLeft;
-// var interval;
 
 
 
 // function renderTime() {
-//     // function renderTime() {
+    function startTimer() {
+            if (secondsRemaining > 0) {
+                interval = setInterval(function () {
+                    
+                    renderTime();
+                }, 1000);
+                
+            }
+            else {
+                
+                alert("you are out of time. End of Quiz!");
+                secondsRemaining = 0;
+                writeScore();
+                
+            }
+            
+            
+        }
+        // }
+        
+        function renderTime() {
+            if (secondsRemaining > 0 && currentQuestion != 10) {
+                secondsElapsed = secondsElapsed + 1;
+                
+                secondsRemaining = totalSeconds - secondsElapsed;
+                minutesRemaining = Math.floor(secondsRemaining / 60);
+                secondsLeft = secondsRemaining % 60;
+                console.log(secondsRemaining);
+                console.log(secondsElapsed);
+                showTimer.textContent = " " + minutesRemaining + " : " + secondsLeft + "     ";
+            }
+            else {
+                writeScore();
+                
+            }
+        }
+        
+        
+        
+        function writeScore() {
+            
+            initials.appendChild(inputInForm);
+            inputInForm.appendChild(inputIn);
+            inputInForm.appendChild(submitFm);
+            secondsRemaining=0;
+            var score1 = correctQuestions * 5;
+            scoreDispaly.textContent="You scored " + score1 + "  points!"+"Please enter your initials below!";
+            showTimer.textContent = " The Quiz has ended , no  ";
+            return ;
+            
+        }
 
-//         function startTimer() {
-//             if (secondsRemaining > 0) {
-//                 interval = setInterval(function () {
-//                     secondsElapsed = secondsElapsed+1;
-//                     // console.log(secondsElapsed);
-//                     secondsRemaining = totalSeconds - secondsElapsed;
-//                     minutesRemaining = Math.floor(secondsRemaining/60);
-//                     secondsLeft= secondsRemaining%60;
-//                     console.log(secondsRemaining);
-//                     console.log(secondsElapsed);
-//                     showTimer.textContent = " " + minutesRemaining + " : " + secondsLeft + "     ";
-
-//                 // showTimer.textContent = " " + minutesRemaining + " : " + secondsRemaining + "     ";
-
-//                 // renderTime();
-
-//             }, 1000);
-
-//         }
-//         else {
-//             alert("you are out of time. End of Quiz!")
-//         }
-
-
-//     }
-//     // }
-//     startTimer();
-// };
-// renderTime();
-
-//---------------------------------------------------------------variant1---------------------------------------------
-
-
-
-var totalSeconds = 10;
-var secondsElapsed = 0;
-// var showTimer = document.body.querySelector("#show"); 
-var secondsRemaining = totalSeconds;
-var minutesRemaining = Math.floor(secondsRemaining / 60);
-var secondsLeft;
-var currentQuestion = 10;
-var interval;
-
-
-
-// function renderTime() {
-function startTimer() {
-    if (secondsRemaining > 0) {
-        interval = setInterval(function () {
-
-            renderTime();
-        }, 1000);
-
-    }
-    else {
-
-        alert("you are out of time. End of Quiz!");
-        secondsRemaining = 0;
-        writeScore();
-
-    }
-
-
-}
-// }
-
-function renderTime() {
-    if (secondsRemaining > 0 && currentQuestion === 10) {
-        secondsElapsed = secondsElapsed + 1;
-        // console.log(secondsElapsed);
-        secondsRemaining = totalSeconds - secondsElapsed;
-        minutesRemaining = Math.floor(secondsRemaining / 60);
-        secondsLeft = secondsRemaining % 60;
-        console.log(secondsRemaining);
-        console.log(secondsElapsed);
-        showTimer.textContent = " " + minutesRemaining + " : " + secondsLeft + "     ";
-    }
-    else {
-        writeScore();
-
-    }
-}
-
-
-var correctQuestions = 1;
-var currentQuestion = 10;
-var initials = "";
-var score = correctQuestions * 5;
-var initials = document.body.querySelector("#initials");
-var inputInForm = document.createElement("form");
-var inputIn = document.createElement("input");
-var submitFm = document.createElement("submit");
-function writeScore() {
-    if (secondsRemaining === 0) {
-        initials.appendChild(inputInForm);
-        inputInForm.appendChild(inputIn);
-        inputInForm.appendChild(submitFm);
-    }
-    else {
-
-    }
-
-}
-// writeScore();
 
 startTimer();
