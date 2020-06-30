@@ -115,87 +115,139 @@ var buttonC = document.body.querySelector("#button-c");
 var buttonD = document.body.querySelector("#button-d");
 
 var showQuestion = document.body.querySelector("#question-status");
+
+var showTimer = document.body.querySelector("#timer-status");
+showQuestion.textContent = " " + (currentQuestion + 1) + "     ";
+// showTimer.textContent = " " + minutesRemaining + " : " + secondsRemaining + "     ";
+
+var totalSeconds = 900;
+// var secondsLeft = totalSeconds - secondsElapsed;
+// var minutesRemaining = Math.floor(secondsLeft / 60);
+// var secondsRemaining = (totalSeconds - secondsElapsed) % 60;
+
+var secondsElapsed = 0;
 var score = document.body.querySelector("#score");
- var end="ended";
+var interval;
 
 // dataQuestionA.textContent = (questionList[curentQuestion].a);
 // dataQuestionB.textContent = (questionList[curentQuestion].b);
 // dataQuestionC.textContent = (questionList[curentQuestion].c);
 // dataQuestionD.textContent = (questionList[curentQuestion].d);
-
-var currentQuestion = 0;
-
+// var currentQuestion = 0;
 
 
-     
+function buttonHandler(event) {
+    var button = event.target;
+    var userAnswer = button.getAttribute("data-answer");
+    console.log(button);
+    showQuestion.textContent = " " + (currentQuestion + 1) + "     ";
+    console.log(userAnswer);
+    console.log(questionId);
+    var questionId = parseInt(button.getAttribute("data-question"));
+    questionList[questionId]["userAnswer"] = userAnswer;
     console.log(currentQuestion);
-    function buttonHandler(event) {
-        showQuestion.textContent = " " + (currentQuestion + 1) + "     ";
-        var button = event.target;
-        var userAnswer = button.getAttribute("data-answer");
-        var questionId = parseInt(button.getAttribute("data-question"));
-        console.log(button);
-        console.log(userAnswer);
-        console.log(questionId);
-        questionList[questionId]["userAnswer"] = userAnswer;
-        if (questionList[questionId]["userAnswer"] === questionList[questionId]["correct"]) {
-            score.textContent = "You got it correct";
-            currentQuestion++;
-            setTimeout(function () {
-                initializeQuestion();
-                score.textContent = "";
-            }, 2000);
-            
+    if (questionList[questionId]["userAnswer"] === questionList[questionId]["correct"]) {
+        score.textContent = "You got it correct";
+        currentQuestion++;
+        setTimeout(function () {
+            initializeQuestion();
+            score.textContent = "";
+        }, 2000);
+    }
+    else {
+        score.textContent = "You got it wrong";
+        secondsElapsed = secondsElapsed+10;
+        currentQuestion++;
+        setTimeout(function () {
+            initializeQuestion();
+            score.textContent = "";
+        }, 2000);
+
+    }
+
+};
+    function initializeQuestion() {
+        // startTimer();
+        console.log(questionList[currentQuestion]);
+        var wholeObj = questionList[currentQuestion];
+        // if (wholeObj === "undefined") {
+        //     return (end);
+        //     console.log(end + "   end questions");
+        // }
+        var question = wholeObj.question;
+        console.log(question);
+        questionTag.textContent = question;
+        questionTag.setAttribute("data-question", currentQuestion);
+
+        answerTagA.textContent = wholeObj.a;
+        answerTagB.textContent = wholeObj.b;
+        answerTagC.textContent = wholeObj.c;
+        answerTagD.textContent = wholeObj.d;
+        
+        buttonA.setAttribute("data-question", currentQuestion);
+        buttonB.setAttribute("data-question", currentQuestion);
+        buttonC.setAttribute("data-question", currentQuestion);
+        buttonD.setAttribute("data-question", currentQuestion);
+    };
+
+    buttonA.addEventListener("click", buttonHandler);
+    buttonB.addEventListener("click", buttonHandler);
+    buttonC.addEventListener("click", buttonHandler);
+    buttonD.addEventListener("click", buttonHandler);
+    
+    initializeQuestion();
+    
+
+
+
+
+
+// initializeQuestion();
+
+// initializeQuestion();
+// renderTime();    
+
+
+
+var totalSeconds = 360;
+var secondsElapsed = 0;
+// var showTimer  = document.body.querySelector("#show");
+var secondsRemaining = 5;
+var minutesRemaining;
+var secondsLeft;
+var interval;
+
+
+
+function renderTime() {
+    // function renderTime() {
+
+        function startTimer() {
+            if (secondsRemaining > 0) {
+                interval = setInterval(function () {
+                    secondsElapsed = secondsElapsed+1;
+                    // console.log(secondsElapsed);
+                    secondsRemaining = totalSeconds - secondsElapsed;
+                    minutesRemaining = Math.floor(secondsRemaining/60);
+                    secondsLeft= secondsRemaining%60;
+                    console.log(secondsRemaining);
+                    console.log(secondsElapsed);
+                    showTimer.textContent = " " + minutesRemaining + " : " + secondsLeft + "     ";
+
+                // showTimer.textContent = " " + minutesRemaining + " : " + secondsRemaining + "     ";
+
+                // renderTime();
+
+            }, 1000);
+
         }
         else {
-            
-            score.textContent = "You got it wrong";
-            currentQuestion++;
-            
-            
-            setTimeout(function () {
-                initializeQuestion();
-                score.textContent = "";
-            }, 2000);
-            
+            alert("you are out of time. End of Quiz!")
         }
+
+
     }
-    
-
-
-buttonA.addEventListener("click", buttonHandler);
-buttonB.addEventListener("click", buttonHandler);
-buttonC.addEventListener("click", buttonHandler);
-buttonD.addEventListener("click", buttonHandler);
-
-
-function initializeQuestion() {
-    console.log(questionList[currentQuestion]);
-    var wholeObj = questionList[currentQuestion];
-    if (wholeObj === "undefined"){
-        return (end);
-        console.log(end + "   end questions");
-    }
-    var question = wholeObj.question;
-    console.log(question);
-    questionTag.textContent = question;
-    questionTag.setAttribute("data-question", currentQuestion);
-    
-    answerTagA.textContent = wholeObj.a;
-    answerTagB.textContent = wholeObj.b;
-    answerTagC.textContent = wholeObj.c;
-    answerTagD.textContent = wholeObj.d;
-    
-    buttonA.setAttribute("data-question", currentQuestion);
-    buttonB.setAttribute("data-question", currentQuestion);
-    buttonC.setAttribute("data-question", currentQuestion);
-    buttonD.setAttribute("data-question", currentQuestion);
-    
-    
+    // }
+    startTimer();
 };
-
-
-
-
-initializeQuestion();
-// set score
+renderTime();
