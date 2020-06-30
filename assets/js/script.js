@@ -114,7 +114,9 @@ var buttonB = document.body.querySelector("#button-b");
 var buttonC = document.body.querySelector("#button-c");
 var buttonD = document.body.querySelector("#button-d");
 
+var showQuestion = document.body.querySelector("#question-status");
 var score = document.body.querySelector("#score");
+ var end="ended";
 
 // dataQuestionA.textContent = (questionList[curentQuestion].a);
 // dataQuestionB.textContent = (questionList[curentQuestion].b);
@@ -123,10 +125,12 @@ var score = document.body.querySelector("#score");
 
 var currentQuestion = 0;
 
-for ( var i = 1; i = questionList.lenth + 1; i++) {
-    var showQuestion = i;
-}
+
+
+     
+    console.log(currentQuestion);
     function buttonHandler(event) {
+        showQuestion.textContent = " " + (currentQuestion + 1) + "     ";
         var button = event.target;
         var userAnswer = button.getAttribute("data-answer");
         var questionId = parseInt(button.getAttribute("data-question"));
@@ -135,56 +139,62 @@ for ( var i = 1; i = questionList.lenth + 1; i++) {
         console.log(questionId);
         questionList[questionId]["userAnswer"] = userAnswer;
         if (questionList[questionId]["userAnswer"] === questionList[questionId]["correct"]) {
-
             score.textContent = "You got it correct";
+            currentQuestion++;
             setTimeout(function () {
-                currentQuestion++;
                 initializeQuestion();
                 score.textContent = "";
             }, 2000);
-
+            
         }
         else {
-
+            
             score.textContent = "You got it wrong";
+            currentQuestion++;
+            
+            
             setTimeout(function () {
-                currentQuestion++;
                 initializeQuestion();
                 score.textContent = "";
             }, 2000);
-
+            
         }
     }
-
-
-    buttonA.addEventListener("click", buttonHandler);
-    buttonB.addEventListener("click", buttonHandler);
-    buttonC.addEventListener("click", buttonHandler);
-    buttonD.addEventListener("click", buttonHandler);
-
-
-    function initializeQuestion() {
-        console.log(questionList[currentQuestion]);
-        var wholeObj = questionList[currentQuestion];
-        var question = wholeObj.question;
-        console.log(question);
-        questionTag.textContent = question;
-        questionTag.setAttribute("data-question", currentQuestion);
-
-        answerTagA.textContent = wholeObj.a;
-        answerTagB.textContent = wholeObj.b;
-        answerTagC.textContent = wholeObj.c;
-        answerTagD.textContent = wholeObj.d;
-
-        buttonA.setAttribute("data-question", currentQuestion);
-        buttonB.setAttribute("data-question", currentQuestion);
-        buttonC.setAttribute("data-question", currentQuestion);
-        buttonD.setAttribute("data-question", currentQuestion);
-
-
-    };
-
     
+
+
+buttonA.addEventListener("click", buttonHandler);
+buttonB.addEventListener("click", buttonHandler);
+buttonC.addEventListener("click", buttonHandler);
+buttonD.addEventListener("click", buttonHandler);
+
+
+function initializeQuestion() {
+    console.log(questionList[currentQuestion]);
+    var wholeObj = questionList[currentQuestion];
+    if (wholeObj === "undefined"){
+        return (end);
+        console.log(end + "   end questions");
+    }
+    var question = wholeObj.question;
+    console.log(question);
+    questionTag.textContent = question;
+    questionTag.setAttribute("data-question", currentQuestion);
+    
+    answerTagA.textContent = wholeObj.a;
+    answerTagB.textContent = wholeObj.b;
+    answerTagC.textContent = wholeObj.c;
+    answerTagD.textContent = wholeObj.d;
+    
+    buttonA.setAttribute("data-question", currentQuestion);
+    buttonB.setAttribute("data-question", currentQuestion);
+    buttonC.setAttribute("data-question", currentQuestion);
+    buttonD.setAttribute("data-question", currentQuestion);
+    
+    
+};
+
+
 
 
 initializeQuestion();
