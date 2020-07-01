@@ -140,38 +140,42 @@ var score = document.body.querySelector("#score");
 var interval;
 
 function buttonHandler(event) {
-    var button = event.target;
-    var userAnswer = button.getAttribute("data-answer");
-    // console.log(button);
-    showQuestion.textContent = " " + (currentQuestion + 1) + "     ";
-    // console.log(userAnswer);
-    var questionId = parseInt(button.getAttribute("data-question"));
-    console.log(questionId);
+    if (currentQuestion < 10) {
+        var button = event.target;
+        var userAnswer = button.getAttribute("data-answer");
+        // console.log(button);
+        showQuestion.textContent = " " + (currentQuestion + 1) + "     ";
+        // console.log(userAnswer);
+        var questionId = parseInt(button.getAttribute("data-question"));
+        console.log(questionId);
 
-    questionList[questionId]["userAnswer"] = userAnswer;
-    // console.log(currentQuestion);
-    if (questionList[questionId]["userAnswer"] === questionList[questionId]["correct"]) {
-        score.textContent = "You got it correct";
-        currentQuestion++;
-        correctQuestions++;
-        console.log(correctQuestions);
-        setTimeout(function () {
-            initializeQuestion();
-            score.textContent = "";
-        }, 1200);
+        questionList[questionId]["userAnswer"] = userAnswer;
+        // console.log(currentQuestion);
+        if (questionList[questionId]["userAnswer"] === questionList[questionId]["correct"]) {
+            score.textContent = "You got it correct";
+            currentQuestion++;
+            correctQuestions++;
+            console.log(correctQuestions);
+            setTimeout(function () {
+                initializeQuestion();
+                score.textContent = "";
+            }, 1200);
+        }
+        else {
+            score.textContent = "You got it wrong";
+            secondsElapsed = secondsElapsed + 10;
+            currentQuestion++;
+            secondsElapsed = secondsElapsed + 20;
+            setTimeout(function () {
+                initializeQuestion();
+                score.textContent = "";
+            }, 1200);
+
+        }
     }
     else {
-        score.textContent = "You got it wrong";
-        secondsElapsed = secondsElapsed + 10;
-        currentQuestion++;
-        secondsElapsed = secondsElapsed + 20;
-        setTimeout(function () {
-            initializeQuestion();
-            score.textContent = "";
-        }, 1200);
-
+        writeScore();
     }
-
 };
 function initializeQuestion() {
     if (currentQuestion < 10) {// console.log(questionList[currentQuestion]);
@@ -255,7 +259,7 @@ function renderTime() {
 
 
 function saveData() {
-    
+
 
     var user = {
         initials: inputIn.value.trim(),
@@ -264,9 +268,9 @@ function saveData() {
 
     //-validation
     if (initials === "") {
-        displayMessage.innerHTML=("error", "initials cannot be blank");
+        displayMessage.innerHTML = ("error", "initials cannot be blank");
     } else {
-        displayMessage.textContent=("success", "Your score is saved successfully");
+        displayMessage.textContent = ("success", "Your score is saved successfully");
     }
     console.log(user);
     localStorage.setItem("user", user);
@@ -286,11 +290,11 @@ var score1;
 
 // inputSubmit.addEventListener("click", click);
 
-inputSubmit.addEventListener("click", function(event){
+inputSubmit.addEventListener("click", function (event) {
 
     event.preventDefault()
     saveData()
-  }); 
+});
 
 
 // saveData();
@@ -300,7 +304,7 @@ inputSubmit.addEventListener("click", function(event){
 //     saveData();
 // };
 var checking;
-console.log(checking+ "  checking");
+console.log(checking + "  checking");
 
 
 function writeScore() {
