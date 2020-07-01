@@ -1,4 +1,4 @@
-
+// questions object arrey - 10 objects
 var questionList = [
     {
         "question": "What is the effect of 'appendTo' command in jquery",
@@ -100,7 +100,7 @@ var questionList = [
     }
 ];
 
-
+// setting of most of the glbal variables
 var totalSeconds = 200;
 var secondsElapsed = 0;
 var secondsRemaining = totalSeconds;
@@ -124,33 +124,27 @@ var buttonC = document.body.querySelector("#button-c");
 var buttonD = document.body.querySelector("#button-d");
 
 var questionId;
-
 var showQuestion = document.body.querySelector("#question-status");
 
 var showTimer = document.body.querySelector("#timer-status");
 var submitFm = document.createElement("submit");
-
-
-
-showQuestion.textContent = " " + (currentQuestion + 1) + "     ";
-
 var secondsElapsed = 0;
 var secondsLeft = totalSeconds;
 var score = document.body.querySelector("#score");
 var interval;
 
+// function when a button is clicked
+
 function buttonHandler(event) {
     if (currentQuestion < 10) {
         var button = event.target;
         var userAnswer = button.getAttribute("data-answer");
-        // console.log(button);
         showQuestion.textContent = " " + (currentQuestion + 1) + "     ";
-        // console.log(userAnswer);
         var questionId = parseInt(button.getAttribute("data-question"));
-        console.log(questionId);
-
         questionList[questionId]["userAnswer"] = userAnswer;
-        // console.log(currentQuestion);
+
+
+        //conditional check  if the  answer is correct    
         if (questionList[questionId]["userAnswer"] === questionList[questionId]["correct"]) {
             score.textContent = "You got it correct";
             currentQuestion++;
@@ -177,12 +171,14 @@ function buttonHandler(event) {
         writeScore();
     }
 };
+
+// function for initilizing each question
 function initializeQuestion() {
-    if (currentQuestion < 10) {// console.log(questionList[currentQuestion]);
+    if (currentQuestion < 10) {
         var wholeObj = questionList[currentQuestion];
 
         var question = wholeObj.question;
-        // console.log(question);
+
         questionTag.textContent = question;
         questionTag.setAttribute("data-question", currentQuestion);
 
@@ -210,9 +206,7 @@ buttonD.addEventListener("click", buttonHandler);
 initializeQuestion();
 
 
-
-
-// function renderTime() {
+// function for the timer
 function startTimer() {
     if (secondsRemaining > 0) {
         interval = setInterval(function () {
@@ -226,18 +220,20 @@ function startTimer() {
         alert("you are out of time. End of Quiz!");
         secondsRemaining = 0;
         writeScore();
-
     }
 
-
 }
-// }
 startTimer();
 
+// global variables needed for the score and user initials
 var initials = "";
 var scoreDispaly = document.body.querySelector("#your-score");
 var initials = document.body.querySelector("#initials");
 
+
+
+// function to display the remaining time, and to prevent timer to continue after 0 , or 
+// after the 10 questions 
 function renderTime() {
     if (secondsRemaining > 0 && currentQuestion != 10) {
         secondsElapsed = secondsElapsed + 1;
@@ -245,8 +241,7 @@ function renderTime() {
         secondsRemaining = totalSeconds - secondsElapsed;
         minutesRemaining = Math.floor(secondsRemaining / 60);
         secondsLeft = secondsRemaining % 60;
-        // console.log(secondsRemaining);
-        // console.log(secondsElapsed);
+
         showTimer.textContent = " " + minutesRemaining + " : " + secondsLeft + "     ";
     }
     else {
@@ -257,7 +252,7 @@ function renderTime() {
 
 
 
-
+// function to save the initials and score to the local storrage
 function saveData() {
 
 
@@ -268,27 +263,27 @@ function saveData() {
 
     //-validation
     if (initials === "") {
-        displayMessage.innerHTML = ("error", "initials cannot be blank");
+        displayMessage.textContent = ("error", "initials cannot be blank");
     } else {
         displayMessage.textContent = ("success", "Your score is saved successfully");
     }
-    console.log(user);
+
     localStorage.setItem("user", user);
     // set new submission
-    console.log(user);
+
     localStorage.setItem("user", user);
 
 
 };
 
-
+//global varables for the new DOM elements
 var inputInForm = document.createElement("form");
 var inputIn = document.createElement("INPUT");
 var inputSubmit = document.createElement("INPUT");
 var displayMessage = document.createElement("div");
 var score1;
 
-// inputSubmit.addEventListener("click", click);
+// eventlistener for the submit button
 
 inputSubmit.addEventListener("click", function (event) {
 
@@ -297,16 +292,13 @@ inputSubmit.addEventListener("click", function (event) {
 });
 
 
-// saveData();
-// // {
-
-// //     // saveData.preventDefault()
-//     saveData();
-// };
+// a variable to ensure the writeScore function will run only once per test.
 var checking;
-console.log(checking + "  checking");
 
 
+
+
+// this part creates the HTML elements and attaches to the index.html file to allow the submission of USER initials
 function writeScore() {
     if (checking === undefined) {
         inputIn.setAttribute("type", "text");
@@ -328,12 +320,12 @@ function writeScore() {
         }
     }
 
-    // document.getElementById("myAnchor").addEventListener("click", 
+    //test end info and score messages
 
     secondsRemaining = 0;
     score1 = correctQuestions * 5;
     scoreDispaly.textContent = "You scored " + score1 + "  points!" + "Please enter your initials below!";
     showTimer.textContent = " The Quiz has ended , no  ";
-    return;
+
 
 };
